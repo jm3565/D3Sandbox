@@ -6,3 +6,14 @@
   margin: 1px;
   color: white;
 }
+
+/*These are the classes for the SVG chart*/
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
