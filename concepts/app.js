@@ -1,6 +1,8 @@
 data = [
-    {'name': 'A', value: 5},
-    {'name': 'B', value: 10},
+    {'name': 'A', value: 5}
+    ,
+    {'name': 'B', value: 10}
+    ,
     {'name': 'C', value: 12},
     {'name': 'D', value: 6},
     {'name': 'E', value: 5},
@@ -9,11 +11,11 @@ data = [
     {'name': 'H', value: 4}
 ];
 
-var _heightUnit = 10,
-    _widthUnit = 20,
-    _depthUnit = 5,
-    _addedChartHeight = 10,
-    _addedChartWidth = 15,
+var _heightUnit = 20,
+    _widthUnit = 40,
+    _depthUnit = 10,
+    _addedChartHeight = 20,
+    _addedChartWidth = 30,
     _maxColHeight = d3.max(data, function(d){
         return +d.value * _heightUnit;
     }),
@@ -36,9 +38,9 @@ function _getPointsPolyTop(colValue){
     var pArr = [],
         yCoord = _scaleY(colValue) + _addedChartHeight;
 
-    pArr.push("" + (_widthUnit - 9) + "," + (yCoord - 5) + "");
-    pArr.push("" + (_widthUnit + 10) + "," + (yCoord - 5) + "");
-    pArr.push("" + (_widthUnit - 1) + "," + yCoord + "");
+    pArr.push("" + (_widthUnit * 0.3) + "," + (yCoord - _depthUnit) + "");
+    pArr.push("" + (_widthUnit * 1.3) + "," + (yCoord - _depthUnit) + "");
+    pArr.push("" + (_widthUnit) + "," + yCoord + "");
     pArr.push("" + 0 + "," + yCoord + "");
 
     return pArr;
@@ -49,8 +51,8 @@ function _getPointsPolySide(colValue){
         yCoord = _scaleY(colValue) + _addedChartHeight;
 
     pArr.push("" + (_widthUnit - 1) + "," + yCoord + "");
-    pArr.push("" + (_widthUnit + 10) + "," + (yCoord - 5) + "");
-    pArr.push("" + (_widthUnit + 10) + "," + (_maxColHeight + 5) + "");
+    pArr.push("" + (_widthUnit * 1.3) + "," + (yCoord - _depthUnit) + "");
+    pArr.push("" + (_widthUnit * 1.3) + "," + (_maxColHeight + _depthUnit) + "");
     pArr.push("" + (_widthUnit - 1) + "," + (_maxColHeight + _addedChartHeight) + "");
 
     return pArr;

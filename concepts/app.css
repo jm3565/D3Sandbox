@@ -3,5 +3,6 @@
 }
 
 .chart polygon {
-    fill: darkblue;
+    fill: lightgray;
+    stroke: white;
 }
