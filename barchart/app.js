@@ -1,61 +1,75 @@
 data = [
-    {'name': 'A', value: 4},
-    {'name': 'B', value: 5},
-    {'name': 'C', value: 12},
-    {'name': 'D', value: 6},
-    {'name': 'E', value: 5},
-    {'name': 'F', value: 9},
-    {'name': 'G', value: 2},
-    {'name': 'H', value: 4}
+    {'name': 'A', value: 10}
+    ,
+    {'name': 'B', value: 5}
+//    ,
+//    {'name': 'C', value: 12},
+//    {'name': 'D', value: 6},
+//    {'name': 'E', value: 5},
+//    {'name': 'F', value: 9},
+//    {'name': 'G', value: 2},
+//    {'name': 'H', value: 4}
 ];
 
-var barWidth = 20,
-    barHeight = 20;
+var _heightUnit = 10,
+    _widthUnit = 20,
+    _depthUnit = 5;
 
-var _scale2 = d3.scale.linear();
-//    .range([0, barWidth]);
+// constructs a new linear scale with range and domain of [0,1]
+var _scale = d3.scale.linear();
 
-var chart = d3.select("body")
-    .append("svg")
-    .attr("class", "chart")
-    .attr("width", d3.max(data, function(d){
-        return +d.value * barWidth;
-    }));
-
-
-_scale2.domain([0, d3.max(data, function(d){
+//Set the domain of a scale (Y coordinate)
+_scale.domain([0, d3.max(data, function(d){
     return +d.value;
 })]);
 
-_scale2.range([0, d3.max(data, function(d){
-    return +d.value * barWidth;}
-)]);
+_scale.range([d3.max(data, function(d){
+    return +d.value * _heightUnit;
+}), 0]);
 
-chart.attr("height", barHeight * data.length);
+// Create the chart tag and give it a
+// width = max value in data * constant width unit for bars
+// height = constant height for bars * the number of elements (bars) in the data
+var chart = d3.select("body")
+    .append("svg")
+    .attr("class", "chart")
+    .attr("width", _widthUnit * data.length)
+    .attr("height", d3.max(data, function(d){
+        return _heightUnit * +d.value;
+    }));
 
+// Create all the gra
 var bar = chart.selectAll("g")
     .data(data)
     .enter()
     .append("g")
     .attr("transform", function(d, i){
-        return "translate(0," + i * barHeight + ")";
+        return "translate(" + i * _widthUnit + ",0)";
     });
 
 bar.append("rect")
-    .attr("width", function(d){
-        return _scale2(+d.value);
-    })
-    .attr("height", barHeight - 1);
-
-bar.append("text")
-    .attr("x", function(d){
-        return _scale2(+d.value) - 3;
-    })
-    .attr("y", barHeight / 2)
-    .attr("dy", ".35em")
-    .text(function(d){
-        return +d.value;
+    .attr("width", _widthUnit - 1)
+    .attr("height", function(d){
+        return _scale(+d.value);
     });
+
+//bar.append("rect")
+//    .attr("width", function(d){
+//        return _scale(+d.value);
+//    })
+//    .attr("height", _heightUnit - 1);
+//
+//
+//
+//bar.append("text")
+//    .attr("x", function(d){
+//        return _scale(+d.value) - 3;
+//    })
+//    .attr("y", _heightUnit / 2)
+//    .attr("dy", ".35em")
+//    .text(function(d){
+//        return +d.value;
+//    });
 
 
 
