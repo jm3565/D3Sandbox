@@ -1,7 +1,7 @@
-.chart rect {
+rect {
   fill: steelblue;
 }
 
-.chart polygon {
+polygon {
     fill: darkblue;
 }
