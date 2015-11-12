@@ -1,8 +1,6 @@
 data = [
-    {'name': 'A', value: 10}
-    ,
-    {'name': 'B', value: 5}
-    ,
+    {'name': 'A', value: 5},
+    {'name': 'B', value: 10},
     {'name': 'C', value: 12},
     {'name': 'D', value: 6},
     {'name': 'E', value: 5},
@@ -14,10 +12,13 @@ data = [
 var _heightUnit = 10,
     _widthUnit = 20,
     _depthUnit = 5,
-    _chartHeight = d3.max(data, function(d){
-        return _heightUnit * +d.value;
+    _addedChartHeight = 10,
+    _addedChartWidth = 15,
+    _maxColHeight = d3.max(data, function(d){
+        return +d.value * _heightUnit;
     }),
-    _chartWidth = _widthUnit * data.length;
+    _chartHeight = _maxColHeight + _addedChartHeight,
+    _chartWidth = _widthUnit * data.length + _addedChartWidth;
 
 // constructs a new linear scale with range and domain of [0,1]
 var _scaleY = d3.scale.linear();
@@ -30,6 +31,30 @@ _scaleY.domain([0, d3.max(data, function(d){
 _scaleY.range([d3.max(data, function(d){
     return +d.value * _heightUnit;
 }), 0]);
+
+function _getPointsPolyTop(colValue){
+    var pArr = [],
+        yCoord = _scaleY(colValue) + _addedChartHeight;
+
+    pArr.push("" + (_widthUnit - 9) + "," + (yCoord - 5) + "");
+    pArr.push("" + (_widthUnit + 10) + "," + (yCoord - 5) + "");
+    pArr.push("" + (_widthUnit - 1) + "," + yCoord + "");
+    pArr.push("" + 0 + "," + yCoord + "");
+
+    return pArr;
+}
+
+function _getPointsPolySide(colValue){
+    var pArr = [],
+        yCoord = _scaleY(colValue) + _addedChartHeight;
+
+    pArr.push("" + (_widthUnit - 1) + "," + yCoord + "");
+    pArr.push("" + (_widthUnit + 10) + "," + (yCoord - 5) + "");
+    pArr.push("" + (_widthUnit + 10) + "," + (_maxColHeight + 5) + "");
+    pArr.push("" + (_widthUnit - 1) + "," + (_maxColHeight + _addedChartHeight) + "");
+
+    return pArr;
+}
 
 var chart = d3.select("body")
     .append("svg")
@@ -47,9 +72,21 @@ var bar = chart.selectAll("g")
 
 bar.append("rect")
     .attr("y", function(d){
-        return _scaleY(d.value);
+        return _scaleY(d.value) + _addedChartHeight;
     })
     .attr("height", function(d){
-        return _chartHeight - _scaleY(d.value);
+        return _chartHeight - _scaleY(d.value) - _addedChartHeight;
     })
     .attr("width", _widthUnit - 1);
+
+bar.append("polygon")
+    .attr("points", function(d){
+        pts = _getPointsPolyTop(d.value);
+        return pts.join(" ");
+});
+
+bar.append("polygon")
+    .attr("points", function(d){
+        pts = _getPointsPolySide(d.value);
+        return pts.join(" ");
+});
