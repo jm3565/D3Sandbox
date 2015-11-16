@@ -12,7 +12,10 @@ var data = [
     {
         'name': 'C',
         'value': 2,
-        'type': 'Headless'
+        'type': 'Headless',
+        'subdata': [{'name': 'a', 'value': 1},
+            {'name': 'b', 'value': 2},
+            {'name': 'c', 'value': 3}]
     },
     {
         'name': 'D',
@@ -44,5 +47,15 @@ AmCharts.ready(function(){
     chart.addGraph(graph);
     chart.write('chartDiv');
 
-    chart.clickGraphItem
+    chart.addListener("clickGraphItem", function(e){
+        if(e.item.dataContext.subdata != undefined){
+            console.log(e);
+            e.chart.dataProvider = e.item.dataContext.subdata;
+            e.chart.validateData();
+        }
+    });
+
+    chart.addListener("clickGraph", function(e){
+        console.log(e);
+    })
 });
